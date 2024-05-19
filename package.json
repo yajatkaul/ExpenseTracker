@@ -2,6 +2,7 @@
   "name": "expensetracker",
   "version": "1.0.0",
   "main": "server.ts",
+  "type": "module",
   "scripts": {
     "server": "nodemon backend/server"
   },
