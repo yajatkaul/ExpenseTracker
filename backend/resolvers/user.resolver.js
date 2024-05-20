@@ -1,4 +1,4 @@
-import { users } from "../dummyData/data.js";
+import Transactions from "../models/transaction.model.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 
@@ -55,7 +55,7 @@ const userResolver = {
     logout: async (_, __, context) => {
       try {
         await context.logout();
-        context.req.session.destroy((err) => {
+        context.res.session.destroy((err) => {
           if (err) throw err;
         });
         res.cleanCookie("connect.sid");
