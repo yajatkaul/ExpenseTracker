@@ -1,19 +1,29 @@
-import { useState } from "react";
+import { useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { GET_TRANSACTION } from "../graphql/queries/transaction.query";
 
 const TransactionPage = () => {
+  const { id } = useParams();
+  const { loading, data } = useQuery(GET_TRANSACTION, {
+    variables: { id: id },
+  });
+
+  console.log(data);
+
   const [formData, setFormData] = useState({
-    description: "",
-    paymentType: "",
-    category: "",
-    amount: "",
-    location: "",
-    date: "",
+    description: data?.transaction?.description || "",
+    paymentType: data?.transaction?.paymentType || "",
+    category: data?.transaction?.category || "",
+    amount: data?.transaction?.amount || "",
+    location: data?.transaction?.location || "",
+    date: data?.transaction?.date || "",
   });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("formData", formData);
   };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -21,6 +31,19 @@ const TransactionPage = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    if (data) {
+      setFormData({
+        description: data?.transaction?.description,
+        paymentType: data?.transaction?.paymentType,
+        category: data?.transaction?.category,
+        amount: data?.transaction?.amount,
+        location: data?.transaction?.location,
+        date: data?.transaction?.date,
+      });
+    }
+  }, [data]);
 
   return (
     <div className="h-screen max-w-4xl mx-auto flex flex-col items-center">
