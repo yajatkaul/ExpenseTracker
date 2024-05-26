@@ -3,16 +3,16 @@ const NotFound = () => {
     <section>
       <div className=" text-white">
         <div className="flex h-screen">
-          <div className="m-auto text-center">
+          <div className="m-auto text-center flex flex-col items-center justify-center">
             <div>
-              <img src="/404.svg" alt="404" />
+              <img src="/notfound.png" alt="404" className="h-[300px]" />
             </div>
-            <p className="text-sm md:text-base text-[#F6009B] p-2 mb-4">
+            <p className="text-sm md:text-base text-white p-2 mb-4">
               The stuff you were looking for doesn't exist
             </p>
             <a
               href="/"
-              className="bg-transparent hover:bg-[#F6009B] text-[#F6009B] hover:text-white rounded shadow hover:shadow-lg py-2 px-4 border border-[#F6009B] hover:border-transparent"
+              className="bg-transparent hover:bg-black text-white rounded shadow hover:shadow-lg py-2 px-4 border border-black hover:border-transparent"
             >
               Take me home
             </a>

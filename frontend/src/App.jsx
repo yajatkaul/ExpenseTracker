@@ -4,7 +4,6 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import TransactionPage from "./pages/TransactionPage";
 import NotFound from "./pages/NotFoundPage";
-import Header from "./components/ui/Header";
 import { useQuery } from "@apollo/client";
 import { Toaster } from "react-hot-toast";
 import { GET_AUTHENTICATED_USER } from "./graphql/queries/user.query";
@@ -15,7 +14,6 @@ function App() {
   if (loading) return null;
   return (
     <>
-      {data?.authUser && <Header />}
       <Routes>
         <Route
           path="/"

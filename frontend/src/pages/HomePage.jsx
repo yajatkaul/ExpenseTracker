@@ -11,8 +11,35 @@ import { LOGOUT } from "../graphql/mutations/user.mutation";
 import { GET_TRANSACTION_STATISTICS } from "../graphql/queries/transaction.query";
 import { useEffect, useState } from "react";
 import { GET_AUTHENTICATED_USER } from "../graphql/queries/user.query";
+import Header from "../components/ui/Header";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const outlineTextPlugin = {
+  id: "outlineTextPlugin",
+  beforeDraw: (chart) => {
+    const { ctx, legend } = chart;
+    if (legend && legend.legendItems.length) {
+      ctx.save();
+      legend.legendItems.forEach((legendItem) => {
+        const text = legendItem.text;
+        const fontSize = 16;
+        const x = legendItem.x + legendItem.boxWidth + 5;
+        const y = legendItem.y + fontSize / 2;
+
+        ctx.font = `bold ${fontSize}px ${legendItem.fontFamily || "Arial"}`;
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "black";
+
+        ctx.strokeText(text, x, y);
+
+        ctx.fillStyle = "white";
+        ctx.fillText(text, x, y);
+      });
+      ctx.restore();
+    }
+  },
+};
 
 const HomePage = () => {
   const { data } = useQuery(GET_TRANSACTION_STATISTICS);
@@ -37,6 +64,21 @@ const HomePage = () => {
       },
     ],
   });
+
+  const chartOptions = {
+    plugins: {
+      legend: {
+        labels: {
+          color: "white",
+          font: {
+            size: 16,
+          },
+        },
+      },
+      outlineTextPlugin: { outlineTextPlugin },
+    },
+  };
+
   useEffect(() => {
     if (data?.categoryStatistics) {
       const categories = data.categoryStatistics.map((stat) => stat.category);
@@ -50,17 +92,18 @@ const HomePage = () => {
       categories.forEach((category) => {
         if (category === "saving") {
           backgroundColors.push("rgba(75, 192, 192)");
-          borderColors.push("rgba(75, 192, 192)");
+          borderColors.push("rgba(0, 0, 0)");
         } else if (category === "expense") {
           backgroundColors.push("rgba(255, 99, 132)");
-          borderColors.push("rgba(255, 99, 132)");
+          borderColors.push("rgba(0, 0, 0)");
         } else if (category === "investment") {
           backgroundColors.push("rgba(54, 162, 235)");
-          borderColors.push("rgba(54, 162, 235)");
+          borderColors.push("rgba(0, 0, 0)");
         }
       });
 
       setChartData((prev) => ({
+        ...prev,
         labels: categories,
         datasets: [
           {
@@ -85,9 +128,10 @@ const HomePage = () => {
 
   return (
     <>
+      <Header />
       <div className="flex flex-col gap-6 items-center max-w-7xl mx-auto z-20 relative justify-center">
         <div className="flex items-center">
-          <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-pink-600 via-indigo-500 to-pink-400 inline-block text-transparent bg-clip-text">
+          <p className="md:text-4xl text-2xl lg:text-4xl font-bold text-center relative z-50 mb-4 mr-4 bg-gradient-to-r from-blue-600 via-green-500 to-green-400 inline-block text-transparent bg-clip-text">
             Spend wisely, track wisely
           </p>
           <img
@@ -97,7 +141,7 @@ const HomePage = () => {
           />
           {!loading && (
             <MdLogout
-              className="mx-2 w-5 h-5 cursor-pointer"
+              className="mx-2 w-5 h-5 cursor-pointer text-white"
               onClick={handleLogout}
             />
           )}
@@ -108,8 +152,8 @@ const HomePage = () => {
         </div>
         <div className="flex flex-wrap w-full justify-center items-center gap-6">
           {data?.categoryStatistics.length > 0 && (
-            <div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px]  ">
-              <Doughnut data={chartData} />
+            <div className="h-[330px] w-[330px] md:h-[360px] md:w-[360px]">
+              <Doughnut data={chartData} options={chartOptions} />
             </div>
           )}
 

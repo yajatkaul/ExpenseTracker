@@ -48,9 +48,12 @@ const Card = ({ transaction, authUser }) => {
         <div className="flex flex-row items-center justify-between">
           <h2 className="text-lg font-bold text-white">{category}</h2>
           <div className="flex items-center gap-2">
-            <FaTrash className={"cursor-pointer"} onClick={handleDelete} />
+            <FaTrash
+              className={"cursor-pointer text-white"}
+              onClick={handleDelete}
+            />
             <Link to={`/transaction/${transaction._id}`}>
-              <HiPencilAlt className="cursor-pointer" size={20} />
+              <HiPencilAlt className="cursor-pointer text-white" size={20} />
             </Link>
           </div>
         </div>
@@ -71,7 +74,7 @@ const Card = ({ transaction, authUser }) => {
           Location: {location || "N/A"}
         </p>
         <div className="flex justify-between items-center">
-          <p className="text-xs text-black font-bold">{formattedDate}</p>
+          <p className="text-xs text-white font-bold">{formattedDate}</p>
           <img
             src={authUser.profilePicture}
             className="h-8 w-8 border rounded-full"
