@@ -23,6 +23,6 @@
 ###
 
 ```shell
-DB_URI = (database uri)
+MONGO_URI = (database uri)
 SESSION_SECRET = password
 ```
